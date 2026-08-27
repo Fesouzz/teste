@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Comuna Esportes - Locais</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <header>
+    <div class="logo">
+      <a href="index.html"><img src="img/logo-comuna-esportes.png" alt="Logo" class="logo-img"></a>
+    </div>
+    <nav class="main-nav">
+      <a href="index.html">Início</a>
+      <a href="locais.html" class="active">Locais</a>
+      <a href="noticias.html">Notícias</a>
+      <a href="quem-somos.html">Quem Somos</a>
+      <a href="contato.html">Contato</a>
+    </nav>
+    <div class="nav-right">
+      <div class="avatar" onclick="window.location.href='login.html'">AD</div>
+    </div>
+  </header>
+
+  <section class="pesquisa-container">
+    <div class="barra-pesquisa">
+      <span class="icone-pesquisa"></span>
+      <input type="search" placeholder="Pesquise o local ou projeto mais próximo...">
+    </div>
+    <nav class="filtros">
+      <button class="filtro ativo">Todos</button>
+      <button class="filtro">Futebol</button>
+      <button class="filtro">Basquete</button>
+      <button class="filtro">Dança</button>
+    </nav>
+  </section>
+
+  <main id="listaCards"></main>
+
+  <script src="js/main.js"></script>
+  <script src="js/locais.js"></script>
+</body>
+</html>

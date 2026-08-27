@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Inscrever Projeto - Comuna Esportes</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="https://cloudflare.com">
+</head>
+<body>
+  <header>
+    <div class="logo">
+      <a href="comuna-esportes.html"><img src="img/logo-comuna-esportes.png" alt="Logo" class="logo-img"></a>
+    </div>
+    <nav class="main-nav">
+      <a href="comuna-esportes.html">Início</a>
+      <a href="locais.html">Locais</a>
+      <a href="noticias.html">Notícias</a>
+      <a href="quem-somos.html">Quem Somos</a>
+    </nav>
+    <div class="nav-right"><div class="avatar">SR</div></div>
+  </header>
+
+  <main class="destaque" style="max-width: 700px;">
+    <h2>Inscreva seu Projeto</h2>
+    <p style="color: #b7b7b7; margin-bottom: 25px;">Deixe a sua proposta e traga o racha, quadro ou coletivo cultural da sua quebrada para o mapa oficial da Comuna.</p>
+    
+    <div class="destaque-card" style="background: #1c1c1c; border-color: #333;">
+      <form id="formCadastroProposta">
+        <div style="margin-bottom: 18px;">
+          <label style="display:block; font-size:0.75rem; text-transform:uppercase; color:#b7b7b7; margin-bottom:8px; font-weight:700;">Nome do Organizador</label>
+          <input type="text" id="propInputNome" required style="width:100%; height:44px; background:#141414; border:1px solid #333; border-radius:8px; color:#fff; padding:0 14px; outline:none;">
+        </div>
+        <div style="margin-bottom: 18px;">
+          <label style="display:block; font-size:0.75rem; text-transform:uppercase; color:#b7b7b7; margin-bottom:8px; font-weight:700;">WhatsApp / E-mail</label>
+          <input type="text" id="propInputContato" required style="width:100%; height:44px; background:#141414; border:1px solid #333; border-radius:8px; color:#fff; padding:0 14px; outline:none;">
+        </div>
+        <div style="margin-bottom: 18px;">
+          <label style="display:block; font-size:0.75rem; text-transform:uppercase; color:#b7b7b7; margin-bottom:8px; font-weight:700;">Nome do Time, Grupo ou Crew</label>
+          <input type="text" id="propInputGrupo" required style="width:100%; height:44px; background:#141414; border:1px solid #333; border-radius:8px; color:#fff; padding:0 14px; outline:none;">
+        </div>
+        <div style="margin-bottom: 18px;">
+          <label style="display:block; font-size:0.75rem; text-transform:uppercase; color:#b7b7b7; margin-bottom:8px; font-weight:700;">Modalidade</label>
+          <select id="propInputModalidade" required style="width:100%; height:44px; background:#141414; border:1px solid #333; border-radius:8px; color:#fff; padding:0 14px; outline:none;">
+            <option value="Futebol">Futebol</option>
+            <option value="Basquete">Basquete</option>
+            <option value="Vôlei">Vôlei</option>
+            <option value="Dança">Dança</option>
+          </select>
+        </div>
+        <div style="margin-bottom: 18px;">
+          <label style="display:block; font-size:0.75rem; text-transform:uppercase; color:#b7b7b7; margin-bottom:8px; font-weight:700;">Local sugerido</label>
+          <input type="text" id="propInputLocal" required style="width:100%; height:44px; background:#141414; border:1px solid #333; border-radius:8px; color:#fff; padding:0 14px; outline:none;">
+        </div>
+        <div style="margin-bottom: 24px;">
+          <label style="display:block; font-size:0.75rem; text-transform:uppercase; color:#b7b7b7; margin-bottom:8px; font-weight:700;">Descrição das atividades</label>
+          <textarea id="propInputDesc" rows="4" required style="width:100%; background:#141414; border:1px solid #333; border-radius:8px; color:#fff; padding:14px; outline:none; resize:none;"></textarea>
+        </div>
+        <button type="submit" class="btn-outline" style="width: 100%; cursor:pointer;">Enviar Proposta para a Mesa</button>
+      </form>
+    </div>
+  </main>
+
+  <script>
+    document.getElementById('formCadastroProposta').addEventListener('submit', function(e) {
+      e.preventDefault();
+      
+      // Cria a estrutura para salvar na lista compartilhada
+      const novaSolicitacao = {
+        grupo: document.getElementById('propInputGrupo').value,
+        modalidade: document.getElementById('propInputModalidade').value,
+        local: document.getElementById('propInputLocal').value,
+        descricao: document.getElementById('propInputDesc').value
+      };
+      
+      let solicitacoes = JSON.parse(localStorage.getItem('solicitacoesMesa')) || [];
+      solicitacoes.push(novaSolicitacao);
+      localStorage.setItem('solicitacoesMesa', JSON.stringify(solicitacoes));
+      
+      alert('Sua proposta foi registrada com sucesso e enviada para o painel de análise!');
+      window.location.href = 'locais.html';
+    });
+  </script>
+  <script src="js/main.js"></script>
+</body>
+</html>
