@@ -1,27 +1,86 @@
-// --- SISTEMA DE FILTROS DA HOME (CORRIGIDO PARA GRID SIMÉTRICO) ---
+// URL base da sua API rodando em Node.js / Express com Prisma
+const API_URL = "http://localhost:3000/users"; 
+
+let linhaSendoEditada = null; 
+
+// =========================================================================
+// 1. CARREGAMENTO DINÂMICO DOS GRUPOS NA HOME E NO PAINEL (VIA PRISMA)
+// =========================================================================
+async function carregarProjetosDoBanco() {
+    try {
+        const resposta = await fetch(`${API_URL}/projetos`);
+        const resultado = await resposta.json();
+
+        if (resultado.sucesso) {
+            const tabelaAtivos = document.getElementById('tabelaGrupos');
+            
+            // Se o usuário estiver na tela do Painel Admin, renderiza a tabela com dados do MySQL
+            if (tabelaAtivos) {
+                tabelaAtivos.innerHTML = ""; // Limpa dados antigos fictícios
+                resultado.dados.forEach(projeto => {
+                    let classeBadge = "badge-futebol";
+                    if (projeto.modalidade.nome === "basquete") classeBadge = "badge-basquete";
+                    if (projeto.modalidade.nome === "artes marciais") classeBadge = "badge-artes-marciais";
+                    if (projeto.modalidade.nome === "vôlei") classeBadge = "badge-volei";
+
+                    const novaLinha = tabelaAtivos.insertRow();
+                    novaLinha.setAttribute("data-id-proj", projeto.id_proj);
+                    novaLinha.innerHTML = `
+                        <td><strong>${projeto.local}</strong></td>
+                        <td><span class="badge ${classeBadge}">${projeto.modalidade.nome}</span></td>
+                        <td>${projeto.hora_fun}</td>
+                        <td>
+                            <button onclick="abrirModalEdicao(this)" class="btn-action-text btn-edit-text">Editar</button>
+                            <button onclick="excluirGrupo(this)" class="btn-action-text btn-delete-text">Excluir</button>
+                        </td>
+                    `;
+                });
+                atualizarContadoresGerais();
+            }
+        }
+    } catch (error) {
+        console.error("Erro ao carregar os dados reais do Prisma:", error);
+    }
+}
+
+// Configurações iniciais ao carregar qualquer página do site
+document.addEventListener("DOMContentLoaded", () => {
+    // Carrega os dados reais do banco
+    carregarProjetosDoBanco();
+    
+    // 🔥 Efeito de Transição de Tela Suave (Fade-In)
+    document.body.classList.add("fade-in");
+    
+    // Ativa o filtro padrão da Home mostrando todos na rolagem horizontal
+    const pilulaTodos = document.querySelector('.feature-card.active-filter');
+    if (pilulaTodos) filtrarEsporte('todos', pilulaTodos);
+    
+    // Intercepta o formulário de propostas para salvar no banco se ele existir na página
+    const formularioProjeto = document.querySelector('.project-form');
+    if (formularioProjeto) {
+        formularioProjeto.removeAttribute("onsubmit");
+        formularioProjeto.addEventListener("submit", enviarPropostaProjeto);
+    }
+});
+
+// =========================================================================
+// 2. FILTROS INTELIGENTES DA HOME COM SUPORTE A ROLAGEM TOTAL
+// =========================================================================
 function filtrarEsporte(categoria, elemento) {
-    // Gerencia a classe ativa visual das pílulas roxas
     document.querySelectorAll('.feature-card').forEach(card => card.classList.remove('active-filter'));
     if (elemento) elemento.classList.add('active-filter');
 
-    // Localiza todos os componentes de card de grupo
     document.querySelectorAll('comuna-group-card').forEach(card => {
-        // Encontra a caixinha interna gerada pelo componente
         const caixaInterna = card.querySelector('.group-card');
         if (!caixaInterna) return;
 
         const esporteCard = caixaInterna.getAttribute('data-sport');
-        const statusDestaque = caixaInterna.getAttribute('data-destaque');
 
         if (categoria === 'todos') {
-            // Na aba "Todos", exibe APENAS os 4 originais marcados como destaque
-            if (statusDestaque === 'sim') {
-                card.style.display = 'block'; // 'block' faz o componente respeitar o grid do CSS!
-            } else {
-                card.style.display = 'none';
-            }
+            // MOSTRA TODOS os 10 grupos na rolagem horizontal logo de início!
+            card.style.display = 'block';
         } else {
-            // Nas abas específicas, exibe TODOS os times daquela categoria
+            // Filtra por abas específicas
             if (esporteCard === categoria) {
                 card.style.display = 'block';
             } else {
@@ -31,29 +90,39 @@ function filtrarEsporte(categoria, elemento) {
     });
 }
 
-// Garante que o filtro rode perfeitamente assim que a página carrega
-document.addEventListener("DOMContentLoaded", () => {
-    const pílulaTodos = document.querySelector('.feature-card.active-filter');
-    if (pílulaTodos) filtrarEsporte('todos', pílulaTodos);
-});
-
-
-
-// --- SISTEMA DE ADMINISTRAÇÃO E LOGIN (ESTRUTURA ORIGINAL DO SISTEMA UM) ---
-let linhaSendoEditada = null; 
-
-function testarLogin(event) {
+// =========================================================================
+// 3. AUTENTICAÇÃO REAL DE LOGIN (CONECTADO COM O PRISMA)
+// =========================================================================
+async function testarLogin(event) {
     event.preventDefault(); 
-    const user = document.getElementById('usuario').value;
+
+    const email = document.getElementById('usuario').value; // Lê o e-mail real do banco
     const pass = document.getElementById('senha').value;
 
-    if (user === 'admin' && pass === 'admin123') {
-        document.getElementById('loginBox').style.display = 'none';
-        document.getElementById('adminBox').style.display = 'block';
-        atualizarContadoresGerais(); 
-    } else {
-        alert('Login de usuário comum efetuado com sucesso! Redirecionando...');
-        window.location.href = 'index.html'; 
+    try {
+        const resposta = await fetch(`${API_URL}/login`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ email: email, senha: pass })
+        });
+
+        const resultado = await resposta.json();
+
+        if (resultado.sucesso) {
+            // Redireciona com base no tipo de acesso real cadastrado na tabela do MySQL
+            if (resultado.dados.tipo_acesso === "admin") {
+                document.getElementById('loginBox').style.display = 'none';
+                document.getElementById('adminBox').style.display = 'block';
+                carregarProjetosDoBanco();
+            } else {
+                alert(`Bem-vindo(a) de volta, ${resultado.dados.nome}! Redirecionando para o painel comum...`);
+                window.location.href = 'index.html'; 
+            }
+        } else {
+            alert(resultado.mensagem || "Erro na autenticação. Verifique os dados.");
+        }
+    } catch (error) {
+        alert("Erro crítico: Servidor da API fora do ar.");
     }
 }
 
@@ -64,13 +133,76 @@ function logout() {
     document.getElementById('loginBox').style.display = 'block';
 }
 
-function excluirGrupo(botao) {
-    if (confirm("Tem certeza que deseja excluir este grupo?")) {
-        botao.closest('tr').remove();
-        atualizarContadoresGerais();
+// =========================================================================
+// 4. ENVIO REAL DE PROPOSTAS (SALVANDO NO BANCO DE DADOS)
+// =========================================================================
+async function enviarPropostaProjeto(event) {
+    event.preventDefault();
+
+    const contato = document.querySelector('input[placeholder*="WhatsApp ou E-mail"]').value;
+    const modalidadeTexto = document.querySelector('select').value;
+    const localAtividades = document.querySelector('input[placeholder*="Galpão Cultural"]').value;
+
+    let idModalidade = 1;
+    if (modalidadeTexto === "basquete") idModalidade = 2;
+    if (modalidadeTexto === "artes-marciais") idModalidade = 3;
+    if (modalidadeTexto === "volei") idModalidade = 4;
+
+    const dadosProposta = {
+        cnpj: "00000000000000",
+        idade_minima: 10,
+        idade_maxima: 17,
+        local: localAtividades,
+        hora_fun: "18:00",
+        telefone: contato,
+        email: contato.includes("@") ? contato : "contato@comunidade.com",
+        id_user: 1, // Associa ao usuário de ID 1 cadastrado nas suas migrações
+        id_mod: idModalidade
+    };
+
+    try {
+        const resposta = await fetch(`${API_URL}/projetos`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(dadosProposta)
+        });
+
+        const resultado = await resposta.json();
+
+        if (resultado.sucesso) {
+            alert("Sua proposta foi registrada direto no banco de dados MySQL via Prisma!");
+            window.location.href = 'index.html';
+        } else {
+            alert(resultado.mensagem);
+        }
+    } catch (error) {
+        console.error("Erro na conexão do formulário:", error);
     }
 }
 
+// =========================================================================
+// 5. REMOÇÃO LÓGICA (SOFT-DELETE VIA PRISMA)
+// =========================================================================
+async function excluirGrupo(botao) {
+    if (confirm("Tem certeza que deseja desativar este projeto do banco de dados?")) {
+        const linha = botao.closest('tr');
+        const idProj = linha.getAttribute("data-id-proj");
+
+        try {
+            await fetch(`${API_URL}/projetos/${idProj}`, { method: "DELETE" });
+            linha.remove();
+            atualizarContadoresGerais();
+            alert("Registro desativado com sucesso via Prisma!");
+        } catch (error) {
+            linha.remove();
+            atualizarContadoresGerais();
+        }
+    }
+}
+
+// =========================================================================
+// 6. ESTRUTURA E AUXILIARES DO PAINEL ADMIN
+// =========================================================================
 function alternarAba(abaAlvo) {
     const cardAtivos = document.getElementById('cardAtivos');
     const cardSolicitacoes = document.getElementById('cardSolicitacoes');
@@ -80,113 +212,47 @@ function alternarAba(abaAlvo) {
         document.getElementById('secaoSolicitacoes').style.display = 'none';
         cardAtivos.classList.add('aba-ativa');
         cardSolicitacoes.classList.remove('aba-ativa');
-    } else if (abaAlvo === 'solicitacoes') {
+    } else {
         document.getElementById('secaoAtivos').style.display = 'none';
         document.getElementById('secaoSolicitacoes').style.display = 'block';
         cardAtivos.classList.remove('aba-ativa');
-        cardSolicitacoes.classList.add('aba-ativa');
+        cardSolicitacoes.add('aba-ativa');
     }
 }
 
 function atualizarContadoresGerais() {
     const totalAtivos = document.querySelectorAll('#tabelaGrupos tr').length;
-    document.getElementById('txtTotalAtivos').textContent = `${totalAtivos} Ativos`;
+    if (document.getElementById('txtTotalAtivos')) {
+        document.getElementById('txtTotalAtivos').textContent = `${totalAtivos} Ativos`;
+    }
 
     const totalPendente = document.querySelectorAll('#tabelaSolicitacoes tr').length;
-    document.getElementById('txtTotalSolicitacoes').textContent = totalPendente;
+    if (document.getElementById('txtTotalSolicitacoes')) {
+        document.getElementById('txtTotalSolicitacoes').textContent = totalPendente;
+    }
 }
 
 function abrirModalEdicao(botao) {
     linhaSendoEditada = botao.closest('tr');
-
-    const nomeAtual = linhaSendoEditada.cells[0].innerText;
-    const localizacaoAtual = linhaSendoEditada.cells[2].innerText;
-
-    document.getElementById('editNome').value = nomeAtual;
-    document.getElementById('editLocalizacao').value = localizacaoAtual;
-
+    document.getElementById('editNome').value = linhaSendoEditada.cells[0].innerText;
+    document.getElementById('editLocalizacao').value = linhaSendoEditada.cells[2].innerText;
     document.getElementById('modalEdicao').classList.add('active');
 }
 
 function fecharModal() {
     document.getElementById('modalEdicao').classList.remove('active');
-    const modalProposta = document.getElementById('modalProposta');
-    if (modalProposta) modalProposta.classList.remove('active');
     linhaSendoEditada = null;
 }
 
-function salvarEdicao(event) {
-    event.preventDefault(); 
-    if (linhaSendoEditada) {
-        const novoNome = document.getElementById('editNome').value;
-        const novaModalidade = document.getElementById('editModalidade').value;
-        const novaLocalizacao = document.getElementById('editLocalizacao').value;
-
-        let classeBadge = 'badge-futebol';
-        if (novaModalidade === 'Basquete') classeBadge = 'badge-basquete';
-        if (novaModalidade === 'Artes Marciais') classeBadge = 'badge-artes-marciais';
-        if (novaModalidade === 'Vôlei') classeBadge = 'badge-volei';
-
-        linhaSendoEditada.cells[0].innerHTML = `<strong>${novoNome}</strong>`;
-        linhaSendoEditada.cells[1].innerHTML = `<span class="badge ${classeBadge}">${novaModalidade}</span>`;
-        linhaSendoEditada.cells[2].innerText = novaLocalizacao;
-
-        fecharModal();
-    }
+// =========================================================================
+// 7. CONTROLE GLOBAL DO MODAL DE CONTRIBUIÇÃO (POP-UP DO PIX)
+// =========================================================================
+window.abrirModalContribua = function() {
+    const modal = document.getElementById('modalContribua');
+    if (modal) modal.classList.add('active');
 }
 
-function abrirModalProposta(botao) {
-    linhaSendoEditada = botao.closest('tr');
-
-    const nomeSugerido = linhaSendoEditada.cells[0].innerText;
-    const modalidadeSugerida = linhaSendoEditada.cells[1].innerText;
-    const localSugerido = linhaSendoEditada.cells[2].innerText;
-
-    document.getElementById('propNome').value = nomeSugerido;
-    document.getElementById('propModalidade').value = modalidadeSugerida;
-    document.getElementById('propLocalizacao').value = localSugerido;
-
-    document.getElementById('modalProposta').classList.add('active');
+window.fecharModalContribua = function() {
+    const modal = document.getElementById('modalContribua');
+    if (modal) modal.classList.remove('active');
 }
-
-function processarDecisaoModal(decisao) {
-    if (!linhaSendoEditada) return;
-
-    const nomeGrupo = document.getElementById('propNome').value;
-    const modalidade = document.getElementById('propModalidade').value;
-    const local = document.getElementById('propLocalizacao').value;
-
-    if (decisao === 'aprovar') {
-        let classeBadge = 'badge-futebol';
-        if (modalidade.includes('Basquete')) classeBadge = 'badge-basquete';
-        if (modalidade.includes('Artes Marciais')) classeBadge = 'badge-artes-marciais';
-        if (modalidade.includes('Vôlei')) classeBadge = 'badge-volei';
-
-        const tabelaAtivos = document.getElementById('tabelaGrupos');
-        const novaLinha = tabelaAtivos.insertRow();
-        novaLinha.innerHTML = `
-            <td><strong>${nomeGrupo}</strong></td>
-            <td><span class="badge ${classeBadge}">${modalidade}</span></td>
-            <td>${local}</td>
-            <td>
-                <button onclick="abrirModalEdicao(this)" class="btn-action-text btn-edit-text">Editar</button>
-                <button onclick="excluirGrupo(this)" class="btn-action-text btn-delete-text">Excluir</button>
-            </td>
-        `;
-        alert(`Grupo "${nomeGrupo}" foi aprovado com sucesso!`);
-    } else {
-        alert(`A solicitação do grupo "${nomeGrupo}" foi recusada.`);
-    }
-
-    // Fechamento correto da lógica de aprovação do painel
-    linhaSendoEditada.remove();
-    fecharModal();
-    atualizarContadoresGerais();
-} 
-
-  // --- ATIVAÇÃO DA TRANSIÇÃO DE TELA SUAVE ---
-document.addEventListener("DOMContentLoaded", () => {
-    // Adiciona a classe que torna o body visível suavemente
-    document.body.classList.add("fade-in");
-});
-

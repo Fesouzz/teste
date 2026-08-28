@@ -1,0 +1,75 @@
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+// 👥 TABELA DE USUÁRIOS (Admin e Comum integrados)
+model Usuario {
+  id          Int       @id @default(autoincrement())
+  nome        String    @db.VarChar(100)
+  email       String    @unique @db.VarChar(100)
+  telefone    String    @db.VarChar(20)
+  endereco    String    @db.VarChar(100)
+  dt_nasc     DateTime  @db.Date
+  senha       String    @db.VarChar(100)
+  tipo_acesso TipoAcesso @default(comum)
+  ativo       Boolean   @default(true)
+
+  // Relacionamentos
+  projetos    Projeto[]
+}
+
+enum TipoAcesso {
+  comum
+  admin
+}
+
+// ⚽ TABELA DE MODALIDADES
+model Modalidade {
+  id_mod     Int       @id @default(autoincrement())
+  nome       String    @unique @db.VarChar(50) // futebol, basquete, volei, artes marciais
+
+  // Relacionamentos
+  projetos   Projeto[]
+}
+
+// 🏢 TABELA DE PROJETOS / LOCAIS
+model Projeto {
+  id_proj      Int        @id @default(autoincrement())
+  cnpj         String     @db.VarChar(14)
+  idade_minima Int
+  idade_maxima Int
+  local        String     @db.VarChar(200)
+  hora_fun     String     @db.VarChar(6)
+  telefone     String     @db.VarChar(20)
+  email        String     @db.VarChar(100)
+  ativo        Boolean    @default(true)
+
+  // Chaves Estrangeiras e Relacionamentos
+  id_user      Int
+  usuario      Usuario    @relation(fields: [id_user], references: [id])
+  id_mod       Int
+  modalidade   Modalidade @relation(fields: [id_mod], references: [id_mod])
+}
+
+// 📰 TABELA DE NOTÍCIAS
+model Noticia {
+  id        Int      @id @default(autoincrement())
+  titulo    String   @db.VarChar(150)
+  descricao String   @db.Text
+  data      DateTime @default(now())
+}
+
+// 📅 TABELA DE EVENTOS (Para alimentar a agenda lateral){
+  id           Int      @id @default(autoincrement())
+  titulo       String   @db.VarChar(150)
+  descricao    String   @db.Text
+  data_evento  DateTime @db.Date
+  local        String   @db.VarChar(200)
+  idade_minima Int
+  idade_maxima Int
+}
