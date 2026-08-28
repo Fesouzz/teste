@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Painel - Comuna Esportes</title>
+    <link rel="stylesheet" href="https://cloudflare.com">
+    <link rel="stylesheet" href="css/style.css">
+    <script src="js/components.js" defer></script>
+</head>
+<body>
+
+    <comuna-navbar></comuna-navbar>
+
+    <div class="main-container">
+        
+        <!-- CARD 1: FORMULÁRIO DE LOGIN -->
+        <div id="loginBox" class="glass-box login-size">
+            <h1>Acesse o Portal</h1>
+            <p style="color: var(--text-dim); font-size: 0.9rem; margin-bottom: 32px;">Use admin / admin123 para acessar o painel</p>
+            
+            <form onsubmit="testarLogin(event)">
+                <div class="form-group">
+                    <label>Usuário ou E-mail</label>
+                    <input type="text" id="usuario" placeholder="Seu usuário" required>
+                </div>
+                <div class="form-group">
+                    <label>Senha</label>
+                    <input type="password" id="senha" placeholder="Sua senha" required>
+                </div>
+                <button type="submit" class="btn-primary">Entrar na Conta</button>
+            </form>
+
+            <a href="index.html" style="margin-top: 24px; display: inline-block; color: var(--text-dim); text-decoration: none;"><i class="fas fa-arrow-left" style="margin-right:6px;"></i>Voltar para o Início</a>
+        </div>
+
+        <!-- CARD 2: PAINEL DO ADMINISTRADOR COMPLETO -->
+        <div id="adminBox" class="glass-box admin-size">
+            <div class="admin-header">
+                <div>
+                    <h1>Painel Administrativo</h1>
+                    <p style="color: var(--text-dim); font-size: 0.9rem;">Gerenciamento interno da Comuna Esportes</p>
+                </div>
+                <button onclick="logout()" class="btn-contribua" style="background:#ef4444;"><i class="fas fa-sign-out-alt"></i> Sair</button>
+            </div>
+
+            <!-- Grade de Abas Originais do Sistema Um -->
+            <div class="stats-grid">
+                <div id="cardAtivos" class="stat-card aba-ativa" onclick="alternarAba('ativos')">
+                    <h3>Total de Grupos</h3>
+                    <p id="txtTotalAtivos">3 Ativos</p>
+                </div>
+                <div id="cardSolicitacoes" class="stat-card" onclick="alternarAba('solicitacoes')">
+                    <h3>Solicitações</h3>
+                    <p id="txtTotalSolicitacoes" style="color: var(--accent-purple);">2</p>
+                </div>
+            </div>
+
+            <!-- ABA 1: GRUPOS ATIVOS -->
+            <div id="secaoAtivos">
+                <h2 style="font-size: 1.1rem; text-transform: uppercase; margin-bottom: 15px;">Grupos Ativos no Site</h2>
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Nome do Grupo</th>
+                                <th>Modalidade</th>
+                                <th>Localização</th>
+                                <th>Ações</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tabelaGrupos">
+                            <tr>
+                                <td><strong>União do Terrão F.C.</strong></td>
+                                <td><span class="badge badge-futebol">Futebol</span></td>
+                                <td>Campo Central</td>
+                                <td>
+                                    <button onclick="abrirModalEdicao(this)" class="btn-action-text btn-edit-text">Editar</button>
+                                    <button onclick="excluirGrupo(this)" class="btn-action-text btn-delete-text">Excluir</button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><strong>Crias do Asfalto 3x3</strong></td>
+                                <td><span class="badge badge-basquete">Basquete</span></td>
+                                <td>Quadra Azul</td>
+                                <td>
+                                    <button onclick="abrirModalEdicao(this)" class="btn-action-text btn-edit-text">Editar</button>
+                                    <button onclick="excluirGrupo(this)" class="btn-action-text btn-delete-text">Excluir</button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- ABA 2: SOLICITAÇÕES ORIGINAIS -->
+            <div id="secaoSolicitacoes" style="display: none;">
+                <h2 style="font-size: 1.1rem; text-transform: uppercase; margin-bottom: 15px;">Solicitações de Novos Grupos</h2>
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Sugestão de Grupo</th>
+                                <th>Modalidade</th>
+                                <th>Localização Sugerida</th>
+                                <th>Ações</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tabelaSolicitacoes">
+                            <tr>
+                                <td><strong>Vôlei dos Coroas</strong></td>
+                                <td><span class="badge badge-volei">Vôlei</span></td>
+                                <td>Quadra de Areia</td>
+                                <td>
+                                    <button onclick="abrirModalProposta(this)" class="btn-action-text" style="color: var(--accent-purple);">Analisar</button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- JANELA MODAL 1: EDIÇÃO COMPLETA -->
+    <div id="modalEdicao" class="modal-overlay">
+        <div class="modal-box">
+            <h2 style="margin-bottom: 20px; font-size: 1.4rem; text-transform: uppercase;">Editar Grupo</h2>
+            <form onsubmit="salvarEdicao(event)">
+                <div class="form-group">
+                    <label>Nome do Grupo</label>
+                    <input type="text" id="editNome" required>
+                </div>
+                <div class="form-group">
+                    <label>Modalidade</label>
+                    <select id="editModalidade" required>
+                        <option value="Futebol">Futebol</option>
+                        <option value="Basquete">Basquete</option>
+                        <option value="Artes Marciais">Artes Marciais</option>
+                        <option value="Vôlei">Vôlei</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Localização</label>
+                    <input type="text" id="editLocalizacao" required>
+                </div>
+                <div class="modal-buttons">
+                    <button type="button" onclick="fecharModal()" class="btn-cancel">Cancelar</button>
+                    <button type="submit" class="btn-primary">Salvar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- JANELA MODAL 2: ANALISAR PROPOSTA ORIGINAL -->
+    <div id="modalProposta" class="modal-overlay">
+        <div class="modal-box" style="position: relative;">
+            <button type="button" onclick="fecharModal()" style="position: absolute; top: 20px; right: 20px; background: transparent; border: none; color: var(--text-dim); font-size: 1.2rem; cursor: pointer;">&times;</button>
+            <h2 style="margin-bottom: 20px; font-size: 1.4rem; text-transform: uppercase;">Analisar Proposta</h2>
+            
+            <div class="form-group"><label>Nome do Grupo</label><input type="text" id="propNome" readonly></div>
+            <div class="form-group"><label>Modalidade</label><input type="text" id="propModalidade" readonly></div>
+            <div class="form-group"><label>Localização</label><input type="text" id="propLocalizacao" readonly></div>
+            <div class="form-group">
+                <label>Descrição da Proposta</label>
+                <textarea id="propDescricao" style="height: 80px; resize: none;" readonly>Este grupo tem o intuito de reunir os moradores locais aos finais de semana para a prática esportiva.</textarea>
+            </div>
+            <div class="modal-buttons">
+                <button type="button" onclick="processarDecisaoModal('recusar')" class="btn-cancel">Recusar</button>
+                <button type="button" onclick="processarDecisaoModal('aprovar')" class="btn-primary">Aceitar Grupo</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/main.js"></script>
+</body>
+</html>

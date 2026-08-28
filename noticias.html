@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Notícias - Comuna Esportes</title>
+    <link rel="stylesheet" href="https://cloudflare.com">
+    <link rel="stylesheet" href="css/style.css">
+    <script src="js/components.js" defer></script>
+
+</head>
+<body>
+
+    <comuna-navbar></comuna-navbar>
+
+    <section class="hero" style="min-height: 280px; padding: 60px 20px;">
+        <h1 class="hero-title" style="font-size: 2.8rem; margin-bottom: 12px;">Mural de Notícias</h1>
+        <p style="color: var(--text-dim); max-width: 600px; margin: 0 auto; line-height: 1.5;">Acompanhe a cobertura completa, os resultados dos torneios e tudo o que movimenta o esporte nas nossas comunidades.</p>
+    </section>
+
+    <!-- Grid de Notícias Refatorado -->
+    <main class="page-section" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 30px;">
+        
+        <article class="group-card" style="flex-direction: column; align-items: stretch; padding: 0; overflow: hidden; height: 100%;">
+            <img src="imagens/fut1.jpg" alt="Futebol" style="width: 100%; height: 200px; object-fit: cover;">
+            <div style="padding: 24px; display: flex; flex-direction: column; flex: 1;">
+                <span style="background: rgba(255, 95, 162, 0.15); color: var(--accent-pink); font-size: 0.75rem; font-weight: 700; padding: 4px 12px; border-radius: 999px; align-self: flex-start; margin-bottom: 12px;">Várzea Ativa</span>
+                <h3 style="font-size: 1.25rem; font-weight: 800; margin-bottom: 12px; line-height: 1.4;">Time de Futebol garante vaga na final do Torneio do Terrão</h3>
+                <p style="color: var(--text-dim); font-size: 0.9rem; line-height: 1.6; margin-bottom: 20px; flex: 1;">Com uma virada histórica nos acréscimos, o time do morro carimbou o passaporte para a grande disputa.</p>
+                <div style="font-size: 0.75rem; color: var(--text-dim); display: flex; justify-content: space-between; border-top: 1px solid #333; padding-top: 14px;">
+                    <span>Por: Redação Comuna</span>
+                    <span>Há 2 horas</span>
+                </div>
+            </div>
+        </article>
+
+        <article class="group-card" style="flex-direction: column; align-items: stretch; padding: 0; overflow: hidden; height: 100%;">
+            <img src="imagens/basquete.jpg" alt="Basquete" style="width: 100%; height: 200px; object-fit: cover;">
+            <div style="padding: 24px; display: flex; flex-direction: column; flex: 1;">
+                <span style="background: rgba(77, 163, 255, 0.15); color: var(--accent-blue); font-size: 0.75rem; font-weight: 700; padding: 4px 12px; border-radius: 999px; align-self: flex-start; margin-bottom: 12px;">Streetball</span>
+                <h3 style="font-size: 1.25rem; font-weight: 800; margin-bottom: 12px; line-height: 1.4;">Basquetebol organiza mutirão para revitalizar a Quadra Azul</h3>
+                <p style="color: var(--text-dim); font-size: 0.9rem; line-height: 1.6; margin-bottom: 20px; flex: 1;">Coletivo de basquete de rua reuniu atletas e moradores para pintura do piso e instalação de novas redes nos aros.</p>
+                <div style="font-size: 0.75rem; color: var(--text-dim); display: flex; justify-content: space-between; border-top: 1px solid #333; padding-top: 14px;">
+                    <span>Por: Lucas Silva</span>
+                    <span>Ontem</span>
+                </div>
+            </div>
+        </article>
+
+    </main>
+
+    <script src="js/main.js"></script>
+</body>
+</html>

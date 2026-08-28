@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Comuna Esportes - Conexão Esportiva</title>
+    <link rel="stylesheet" href="https://cloudflare.com">
+    <link rel="stylesheet" href="css/style.css">
+    <script src="js/components.js" defer></script>
+</head>
+<body>
+
+    <!-- MENU COMPONENTIZADO -->
+    <comuna-navbar></comuna-navbar>
+
+    <section class="hero">
+        <h1 class="hero-title">Junte-se à nossa<br>conexão esportiva.</h1>
+        <a href="#grupos" class="btn-cta">Encontre seu grupo</a>
+    </section>
+
+    <!-- FILTROS DA HOME COMPONENTIZADOS -->
+    <comuna-filters></comuna-filters>
+       <!-- SEÇÃO: Grupos em Destaque Inteligente com Rolagem Horizontal -->
+    <section class="page-section" id="grupos">
+        <h2 class="section-title" style="text-align: center; margin-bottom: 30px;">Grupos em Destaque</h2>
+        
+        <div class="groups-grid">
+            
+            <!-- ⚽ CATEGORIA: FUTEBOL -->
+            <comuna-group-card sport="futebol" destaque="sim" url="futebol.html" emoji="⚽" name="União do Terrão F.C." meta="42 Atletas • Campo Central"></comuna-group-card>
+            <comuna-group-card sport="futebol" destaque="nao" url="futebol.html" emoji="🏆" name="Racha dos Cria" meta="26 Jogadores • Quadra Azul"></comuna-group-card>
+            <comuna-group-card sport="futebol" destaque="nao" url="futebol.html" emoji="🥇" name="Vila Nova F.C." meta="31 Atletas • Arena Leste"></comuna-group-card>
+
+            <!-- 🏀 CATEGORIA: BASQUETE -->
+            <comuna-group-card sport="basquete" destaque="sim" url="basquete.html" emoji="🏀" name="Crias do Asfalto 3x3" meta="28 Jogadores • Quadra do Parque"></comuna-group-card>
+            <comuna-group-card sport="basquete" destaque="nao" url="basquete.html" emoji="🔥" name="Liga Inter-Ruas 3x3" meta="18 Atletas • Praça Central"></comuna-group-card>
+            <comuna-group-card sport="basquete" destaque="nao" url="basquete.html" emoji="👑" name="Street Ballers Crew" meta="22 Jogadores • Parque Norte"></comuna-group-card>
+
+            <!-- 🥋 CATEGORIA: ARTES MARCIAIS -->
+            <comuna-group-card sport="artes-marciais" destaque="sim" url="artes-marciais.html" emoji="🥋" name="Crias do Tatame" meta="35 Alunos • Galpão Cultural"></comuna-group-card>
+            <comuna-group-card sport="artes-marciais" destaque="nao" url="artes-marciais.html" emoji="🤸‍♂️" name="Cordão de Ouro Capoeira" meta="40 Integrantes • Praça Central"></comuna-group-card>
+
+            <!-- 🏐 CATEGORIA: VÔLEI -->
+            <comuna-group-card sport="volei" destaque="sim" url="volei.html" emoji="🏐" name="Vôlei dos Coroas" meta="24 Atletas • Quadra de Areia"></comuna-group-card>
+            <comuna-group-card sport="volei" destaque="nao" url="volei.html" emoji="⚡" name="Rede Alta 4x4" meta="16 Jogadores • Ginasio Poliesportivo"></comuna-group-card>
+
+        </div>
+    </section>
+
+
+
+    <!-- FOOTER COMPONENTIZADO -->
+    <comuna-footer></comuna-footer>
+    <!-- ========================================== -->
+    <div id="modalContribua" class="modal-overlay">
+        <div class="modal-box">
+            <!-- Botão de fechar (X) no topo direito -->
+            <button type="button" onclick="fecharModalContribua()" style="position: absolute; top: 20px; right: 20px; background: transparent; border: none; color: var(--text-dim); font-size: 1.5rem; cursor: pointer; line-height: 1;">&times;</button>
+            
+            <!-- Ícone de Coração Roxo Premium -->
+            <i class="fas fa-heart" style="font-size: 2.5rem; color: var(--accent-purple); margin-bottom: 15px;"></i>
+            
+            <h2 style="margin-bottom: 12px; font-size: 1.4rem; text-transform: uppercase; font-weight: 800; letter-spacing: -0.5px;">Apoie a Comuna</h2>
+            
+            <p style="color: var(--text-dim); font-size: 0.95rem; line-height: 1.6; margin-bottom: 20px; padding: 0 10px;">
+                Gostou do projeto? Você pode contribuir com qualquer valor para mantermos a Comuna ativa e fortalecendo o esporte na nossa quebrada!
+            </p>
+
+            <!-- Caixa de Chave Pix em Destaque com Borda Roxa do Sistema Dois -->
+            <div style="background: rgba(20, 20, 20, 0.6); border: 1px dashed var(--pill-border); padding: 14px; border-radius: 12px; margin-bottom: 24px; font-weight: 700; color: #ffffff; letter-spacing: 0.5px; font-size: 1rem;">
+                pix@comunaesportes.org
+            </div>
+
+            <!-- Botão de Fechar da Base -->
+            <button onclick="fecharModalContribua()" class="btn-primary" style="width: 100%; padding: 14px; border-radius: 12px; font-weight: 700; text-transform: uppercase;">Fechar Janela</button>
+        </div>
+    </div>
+
+    <!-- Scripts de lógica mantidos por último -->
+    <script src="js/main.js"></script>
+</body>
+</html>
+

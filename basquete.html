@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Basquete de Rua - Comuna Esportes</title>
+    <link rel="stylesheet" href="https://cloudflare.com">
+    <link rel="stylesheet" href="css/style.css">
+    <script src="js/components.js" defer></script>
+</head>
+<body>
+
+    <!-- MENU SUPERIOR COMPONENTIZADO -->
+    <comuna-navbar></comuna-navbar>
+
+     <section class="hero" style="padding: 100px 40px 60px 40px;">
+        <h1 class="hero-title" style="font-size: 2.8rem; margin-bottom: 12px;">Basquete de Rua</h1>
+        <p style="color: var(--text-dim); max-width: 600px; margin: 0 auto; line-height: 1.5;">Cole nos principais rachas, circuitos 3x3 e quadras icônicas mapeadas nas comunidades locais e fortaleça o streetball!</p>
+    </section>
+
+
+
+    <div class="page-section" style="display: grid; grid-template-columns: 1.8fr 1fr; gap: 40px;">
+        <main>
+            <h2 class="section-title">Grupos e Coletivos</h2>
+            <div style="display: flex; flex-direction: column; gap: 16px;">
+                <div class="group-card" style="justify-content: space-between; width: 100%;">
+                    <div style="display: flex; align-items: center; gap: 16px;">
+                        <div class="group-emoji">🏀</div>
+                        <div class="group-info">
+                            <h3 class="group-name">Crias do Asfalto 3x3</h3>
+                            <p class="group-meta">Segundas e Quartas às 19h • Quadra do Parque • Racha Aberto</p>
+                        </div>
+                    </div>
+                    <button class="btn-join" style="padding: 10px 20px;" onclick="alert('Pedido de código enviado para o racha Crias do Asfalto!')">Pedir Código</button>
+                </div>
+            </div>
+        </main>
+
+        <aside>
+            <h2 class="section-title">Próximos Desafios</h2>
+            <!-- AGENDA COMPONENTIZADA -->
+            <comuna-match-card date="Quinta-Feira - 19:30" team1="Os Cria" team2="Z/L Ballers" location="Quadra do Parque"></comuna-match-card>
+        </aside>
+    </div>
+
+    <!-- RODAPÉ COMPONENTIZADO -->
+    <comuna-footer></comuna-footer>
+
+    <!-- POP-UP DE CONTRIBUIÇÃO (Obrigatório no final de cada tela) -->
+    <div id="modalContribua" class="modal-overlay">
+        <div class="modal-box">
+            <button type="button" onclick="fecharModalContribua()" style="position: absolute; top: 20px; right: 20px; background: transparent; border: none; color: var(--text-dim); font-size: 1.5rem; cursor: pointer; line-height: 1;">&times;</button>
+            <i class="fas fa-heart" style="font-size: 2.5rem; color: var(--accent-purple); margin-bottom: 15px;"></i>
+            <h2 style="margin-bottom: 12px; font-size: 1.4rem; text-transform: uppercase; font-weight: 800;">Apoie a Comuna</h2>
+            <p style="color: var(--text-dim); font-size: 0.95rem; line-height: 1.6; margin-bottom: 20px;">Gostou do projeto? Você pode contribuir com qualquer valor para mantermos a Comuna ativa e fortalecendo o esporte na nossa quebrada!</p>
+            <div style="background: rgba(20, 20, 20, 0.6); border: 1px dashed var(--pill-border); padding: 14px; border-radius: 12px; margin-bottom: 24px; font-weight: 700; color: #ffffff;">pix@comunaesportes.org</div>
+            <button onclick="fecharModalContribua()" class="btn-primary" style="width: 100%; padding: 14px; border-radius: 12px; font-weight: 700; text-transform: uppercase;">Fechar Janela</button>
+        </div>
+    </div>
+
+    <script src="js/main.js"></script>
+</body>
+</html>

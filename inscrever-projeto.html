@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inscrever Projeto - Comuna Esportes</title>
+    <link rel="stylesheet" href="https://cloudflare.com">
+    <link rel="stylesheet" href="css/style.css">
+    <script src="js/components.js" defer></script>
+
+</head>
+<body>
+
+      <comuna-navbar></comuna-navbar>
+
+    <div class="page-section" style="max-width: 700px; margin-top: 40px;">
+        <div style="text-align: center; margin-bottom: 35px;">
+            <h1 style="font-size: 2.3rem; font-weight: 800; text-transform: uppercase; margin-bottom: 10px;">Inscreva seu Projeto</h1>
+            <p style="color: var(--text-dim); font-size: 0.95rem;">Deixe a sua proposta e traga o racha, time ou dojô da sua quebrada para o mapa oficial da Comuna Esportes.</p>
+        </div>
+
+        <form class="glass-box" style="padding: 35px;" onsubmit="alert('Proposta enviada! Nossa equipe entrará em contato para validar o cadastro.'); window.location.href='index.html'; return false;">
+            <div class="form-group">
+                <label>Nome do Responsável</label>
+                <input type="text" placeholder="Ex: Carlos Oliveira" style="padding-left:16px;" required>
+            </div>
+            <div class="form-group">
+                <label>Contato (WhatsApp ou E-mail)</label>
+                <input type="text" placeholder="Ex: (11) 99999-9999" style="padding-left:16px;" required>
+            </div>
+            <div class="form-group">
+                <label>Nome do Coletivo ou Time</label>
+                <input type="text" placeholder="Ex: Crias do Tatame" style="padding-left:16px;" required>
+            </div>
+            <div class="form-group">
+                <label>Modalidade Atendida</label>
+                <select style="padding-left:16px; background-image:none;" required>
+                    <option value="" disabled selected>Selecione a modalidade</option>
+                    <option value="futebol">Futebol</option>
+                    <option value="basquete">Basquete</option>
+                    <option value="artes-marciais">Artes Marciais</option>
+                    <option value="volei">Vôlei</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Resumo da sua Proposta</label>
+                <textarea rows="4" placeholder="Conte os horários, dias e objetivos do seu projeto comunitário..." style="padding-left:16px; font-family:inherit;" required></textarea>
+            </div>
+            <button type="submit" class="btn-primary" style="background: var(--purple-grad);">Enviar Proposta Oficial</button>
+        </form>
+    </div>
+
+    <script src="js/main.js"></script>
+</body>
+</html>
