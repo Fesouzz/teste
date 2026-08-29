@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inscrever Projeto - Comuna Esportes</title>
+    <link rel="stylesheet" href="css/style.css">
+    <script src="js/components.js" defer></script>
+</head>
+<body>
+
+    <!-- Menu Superior Global -->
+    <comuna-navbar></comuna-navbar>
+
+    <div class="page-section" style="max-width: 700px; margin-top: 40px;">
+        <div style="text-align: center; margin-bottom: 35px;">
+            <h1 style="font-size: 2.3rem; font-weight: 800; text-transform: uppercase; margin-bottom: 10px;">Inscreva seu Projeto</h1>
+            <p style="color: var(--text-dim); font-size: 0.95rem;">Deixe a sua proposta e traga o racha, time ou dojô da sua quebrada para o mapa oficial da Comuna Esportes.</p>
+        </div>
+
+        <!-- FORMULÁRIO COMPLETO COM TODOS OS CAMPOS DO BANCO DE DADOS -->
+        <form class="glass-box project-form" style="padding: 35px;">
+            
+            <!-- 1. RESPONSÁVEL -->
+            <div class="form-group">
+                <label>Nome do Responsável</label>
+                <input type="text" id="formResponsavel" placeholder="Ex: Carlos Oliveira" style="padding-left:16px;" required>
+            </div>
+
+            <!-- 2. CNPJ -->
+            <div class="form-group" style="margin-top: 15px;">
+                <label>CNPJ do Coletivo/ONG (Apenas 14 dígitos)</label>
+                <input type="text" id="formCnpj" placeholder="Ex: 00000000000000" maxlength="14" style="padding-left:16px;" required>
+            </div>
+
+            <!-- 3. COLETIVO / TIME / LOCAL -->
+            <div class="form-group" style="margin-top: 15px;">
+                <label>Nome do Coletivo, Time ou Local das Atividades</label>
+                <input type="text" id="formLocal" placeholder="Ex: Crias do Tatame / Quadra Central" style="padding-left:16px;" required>
+            </div>
+
+            <!-- 4. FAIXA ETÁRIA (IDADE MÍNIMA E IDADE MÁXIMA) -->
+            <div style="display: flex; gap: 15px; margin-top: 15px;">
+                <div class="form-group" style="flex: 1;">
+                    <label>Idade Mínima</label>
+                    <input type="number" id="formIdadeMin" placeholder="Ex: 10" min="1" max="100" style="padding-left:16px; width: 100%;" required>
+                </div>
+                <div class="form-group" style="flex: 1;">
+                    <label>Idade Máxima</label>
+                    <input type="number" id="formIdadeMax" placeholder="Ex: 16" min="1" max="100" style="padding-left:16px; width: 100%;" required>
+                </div>
+            </div>
+
+            <!-- 5. HORÁRIO E TELEFONE -->
+            <div style="display: flex; gap: 15px; margin-top: 15px;">
+                <div class="form-group" style="flex: 1;">
+                    <label>Horário de Funcionamento (HH:MM)</label>
+                    <input type="text" id="formHora" placeholder="Ex: 19:00" maxlength="5" style="padding-left:16px; width: 100%;" required>
+                </div>
+                <div class="form-group" style="flex: 1;">
+                    <label>Telefone de Contato</label>
+                    <input type="text" id="formTelefone" placeholder="Ex: (11) 99999-9999" style="padding-left:16px; width: 100%;" required>
+                </div>
+            </div>
+
+            <!-- 6. E-MAIL -->
+            <div class="form-group" style="margin-top: 15px;">
+                <label>E-mail Oficial</label>
+                <input type="email" id="formEmail" placeholder="Ex: contato@projeto.com" style="padding-left:16px;" required>
+            </div>
+
+            <!-- 7. MODALIDADE ATENDIDA -->
+            <div class="form-group" style="margin-top: 15px;">
+                <label>Modalidade Atendida</label>
+                <select id="formModalidade" style="padding-left:16px; background-image:none; width: 100%; color: #fff; background: #111; border: 1px solid rgba(112, 0, 255, 0.3); border-radius: 8px; padding: 12px;" required>
+                    <option value="" disabled selected>Selecione a modalidade</option>
+                    <option value="futebol">Futebol</option>
+                    <option value="basquete">Basquete</option>
+                    <option value="artes-marciais">Artes Marciais</option>
+                    <option value="volei">Vôlei</option>
+                </select>
+            </div>
+
+            <!-- 8. RESUMO / DESCRIÇÃO LONGA -->
+            <div class="form-group" style="margin-top: 15px;">
+                <label>Descrição e Detalhes da Proposta</label>
+                <textarea id="formDescricao" rows="4" placeholder="Conte os objetivos do seu projeto comunitário para o administrador ler no painel..." style="padding-left:16px; font-family:inherit; width: 100%; background: #111; color: #fff; border: 1px solid rgba(112, 0, 255, 0.3); border-radius: 8px; padding: 12px; resize: none;" required></textarea>
+            </div>
+
+            <button type="submit" class="btn-primary" style="background: var(--purple-grad); width: 100%; padding: 14px; font-weight: bold; text-transform: uppercase; border-radius: 8px; cursor: pointer; color: #fff; border: none; margin-top: 25px;">
+                Enviar Proposta Oficial
+            </button>
+        </form>
+    </div>
+
+    <!-- Rodapé Global -->
+    <comuna-footer></comuna-footer>
+
+    <!-- Scripts de Controle do Banco de Dados e Integração -->
+    <script src="js/main.js"></script>
+</body>
+</html>
