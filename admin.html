@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Painel Admin - Comuna Esportes</title>
+    <!-- Adicionamos o ?v=2 no final para quebrar o cache do navegador de vez! -->
+    <link rel="stylesheet" href="css/style.css?v=2">
+    <link rel="stylesheet" href="https://cloudflare.com">
+    <script src="js/components.js" defer></script>
+</head>
+
+    <style>
+        /* --- ESTILIZAÇÃO DO PAINEL ADMIN ESTILO PINTEREST --- */
+        .admin-header-pinterest {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px 24px 20px 24px;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .admin-title h1 {
+            font-size: 2.2rem;
+            font-weight: 800;
+            color: #ffffff;
+            letter-spacing: -0.5px;
+            margin-bottom: 4px;
+        }
+
+        .admin-title p {
+            font-size: 1rem;
+            color: var(--text-dim);
+        }
+
+        /* Botão Sair estilo pílula limpa */
+        .btn-admin-logout {
+            background: rgba(239, 68, 68, 0.1);
+            color: #ef4444;
+            padding: 12px 24px;
+            border-radius: 24px;
+            font-weight: 700;
+            font-size: 0.9rem;
+            border: 1px solid rgba(239, 68, 68, 0.2);
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .btn-admin-logout:hover {
+            background: #ef4444;
+            color: #ffffff;
+        }
+
+        /* Pastas de Métricas do Pinterest */
+        .admin-metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px 24px;
+        }
+
+        .metric-folder {
+            background: #1c1c1c;
+            border: 1px solid #2c2c2c;
+            border-radius: 24px;
+            padding: 24px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .metric-folder:hover, .metric-folder.folder-active {
+            border-color: var(--accent-purple);
+            background: linear-gradient(135deg, #1c1c1c 0%, rgba(138, 78, 255, 0.05) 100%);
+            transform: translateY(-2px);
+        }
+
+        .metric-folder h3 {
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            color: var(--text-dim);
+            letter-spacing: 0.5px;
+            margin-bottom: 8px;
+            font-weight: 700;
+        }
+
+        .metric-folder p {
+            font-size: 2.2rem;
+            font-weight: 800;
+            color: #ffffff;
+        }
+
+        .metric-folder .folder-icon {
+            position: absolute;
+            right: 24px;
+            bottom: 20px;
+            font-size: 2.5rem;
+            color: rgba(138, 78, 255, 0.15);
+            transition: color 0.2s;
+        }
+        .metric-folder:hover .folder-icon, .metric-folder.folder-active .folder-icon {
+            color: rgba(138, 78, 255, 0.4);
+        }
+
+        /* Abas centrais de navegação */
+        .admin-tabs {
+            display: flex;
+            justify-content: center;
+            gap: 24px;
+            margin: 20px 0 40px 0;
+            border-bottom: 1px solid #2c2c2c;
+            padding-bottom: 12px;
+        }
+
+        .admin-tab {
+            font-size: 1rem;
+            font-weight: 700;
+            color: var(--text-dim);
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 8px 4px;
+            position: relative;
+            transition: color 0.2s;
+        }
+
+        .admin-tab.active-tab {
+            color: #ffffff;
+        }
+
+        .admin-tab.active-tab::after {
+            content: '';
+            position: absolute;
+            bottom: -13px;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background-color: #ffffff;
+            border-radius: 2px;
+        }
+
+        /* Mural Pinterest para os Cards de Gerenciamento */
+        .admin-mural-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+            max-width: 1200px;
+            width: 100%;
+            margin: 0 auto;
+            padding: 0 24px 60px 24px;
+        }
+
+        /* Card customizado para ações administrativas */
+        .admin-control-card {
+            background: var(--bg-card);
+            border: 1px solid #2c2c2c;
+            border-radius: 20px;
+            padding: 24px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            gap: 16px;
+            transition: all 0.2s ease;
+        }
+
+        .admin-control-card:hover {
+            border-color: var(--pill-border);
+            transform: translateY(-2px);
+        }
+
+        .card-header-info {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+
+        .card-actions-row {
+            display: flex;
+            justify-content: flex-end;
+            gap: 12px;
+            border-top: 1px solid #2c2c2c;
+            padding-top: 14px;
+        }
+
+        .btn-action-pill {
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            border: none;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .btn-action-edit { background: rgba(77, 163, 255, 0.1); color: #4da3ff; }
+        .btn-action-edit:hover { background: #4da3ff; color: #141414; }
+
+        .btn-action-delete { background: rgba(239, 68, 68, 0.1); color: #ef4444; }
+        .btn-action-delete:hover { background: #ef4444; color: #ffffff; }
+
+        .btn-action-analyze { background: rgba(138, 78, 255, 0.15); color: var(--accent-purple); width: 100%; }
+        .btn-action-analyze:hover { background: var(--purple-grad); color: #ffffff; }
+
+        .tab-content { display: none; }
+        .tab-content.active-content { display: block; }
+    </style>
+</head>
+<body>
+
+    <!-- MENU SUPERIOR GLOBAL -->
+    <comuna-navbar></comuna-navbar>
+
+    <!-- CABEÇALHO DO PAINEL ADMIN -->
+    <header class="admin-header-pinterest">
+        <div class="admin-title">
+            <h1>Painel de Controle</h1>
+            <p>Visão geral e moderação do ecossistema Comuna Esportes</p>
+        </div>
+        <button onclick="efetuarSairAdmin()" class="btn-admin-logout"><i class="fas fa-sign-out-alt"></i> Sair do Painel</button>
+    </header>
+
+    <!-- PASTAS DE MÉTRICAS (Estilo Álbuns do Pinterest) -->
+    <section class="admin-metrics-grid">
+        <div id="cardAtivos" class="metric-folder folder-active" onclick="alternarAbasAdmin('ativos', document.getElementById('tabAtivos'))">
+            <h3>Grupos Ativos</h3>
+            <p id="txtTotalAtivos">0 Ativos</p>
+            <i class="fas fa-folder-open folder-icon"></i>
+        </div>
+        <div id="cardSolicitacoes" class="metric-folder" onclick="alternarAbasAdmin('solicitacoes', document.getElementById('tabSolicitacoes'))">
+            <h3>Novas Propostas</h3>
+            <p id="txtTotalSolicitacoes" style="color: var(--accent-purple);">0 Pendentes</p>
+            <i class="fas fa-clock folder-icon"></i>
+        </div>
+    </section>
+
+    <!-- ABAS FLUIDAS DE NAVEGAÇÃO -->
+    <div class="admin-tabs">
+        <button id="tabAtivos" class="admin-tab active-tab" onclick="alternarAbasAdmin('ativos', this)">Grupos no Ar</button>
+        <button id="tabSolicitacoes" class="admin-tab" onclick="alternarAbasAdmin('solicitacoes', this)">Análise de Triagem</button>
+    </div>
+
+    <!-- SEÇÃO 1: GRUPOS ATIVOS NO MAPA -->
+    <div id="secaoAtivos" class="tab-content active-content">
+        <div class="admin-mural-grid" id="muralAtivos">
+            <!-- Gerado dinamicamente via JS (Exemplo visual abaixo) -->
+            <div class="admin-control-card">
+                <div class="card-header-info">
+                    <div class="group-emoji">⚽</div>
+                    <div class="group-info">
+                        <span class="group-name">União do Terrão F.C.</span>
+                        <span class="group-meta"><span class="badge badge-futebol">Futebol</span> • Sábados às 14h</span>
+                    </div>
+                </div>
+                <div class="card-actions-row">
+                    <button class="btn-action-pill btn-action-edit" onclick="abrirModalEdicao(this)">Editar</button>
+                    <button class="btn-action-pill btn-action-delete" onclick="excluirGrupo(this)">Remover</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- SEÇÃO 2: PROPOSTAS PENDENTES DE TRIAGEM -->
+    <div id="secaoSolicitacoes" class="tab-content">
+        <div class="admin-mural-grid" id="muralSolicitacoes">
+            <!-- Gerado dinamicamente via JS (Exemplo visual abaixo) -->
+            <div class="admin-control-card">
+                <div class="card-header-info">
+                    <div class="group-emoji">🥋</div>
+                    <div class="group-info">
+                        <span class="group-name">Crias do Tatame</span>
+                        <span class="group-meta"><span class="badge badge-artes-marciais">Artes Marciais</span> • 19:00</span>
+                    </div>
+                </div>
+                <button class="btn-action-pill btn-action-analyze" onclick="abrirModalProposta(1)">Analisar Proposta Completa</button>
+            </div>
+        </div>
+    </div>
+
+      <!-- =========================================================================
+       🔥 JANELAS MODAIS ADMINISTRATIVAS (ESTILO PINTEREST CLEAN-DARK) 🔥
+       ========================================================================= -->
+
+    <!-- JANELA MODAL 1: EDIÇÃO COMPLETA -->
+    <div id="modalEdicao" class="modal-overlay">
+        <div class="modal-box" style="background: #ffffff !important; color: #111111 !important; border-radius: 28px; padding: 35px; max-width: 460px;">
+            <h2 style="margin-bottom: 24px; font-size: 1.4rem; text-transform: uppercase; font-weight: 800; color: #111111; text-align: center; letter-spacing: -0.5px;">Editar Grupo</h2>
+            
+            <form onsubmit="event.preventDefault();">
+                <div class="form-group" style="margin-bottom: 16px;">
+                    <label style="color: #333333; font-weight: 700; font-size: 0.75rem; text-transform: uppercase; display: block; margin-bottom: 6px; padding-left: 4px;">Nome do Grupo</label>
+                    <input type="text" id="editNome" style="background: #ffffff; color: #111111; border: 2px solid #cdcdcd; border-radius: 14px; padding: 12px 16px;" required>
+                </div>
+                <div class="form-group" style="margin-bottom: 24px;">
+                    <label style="color: #333333; font-weight: 700; font-size: 0.75rem; text-transform: uppercase; display: block; margin-bottom: 6px; padding-left: 4px;">Localização / Modalidade</label>
+                    <input type="text" id="editLocalizacao" style="background: #ffffff; color: #111111; border: 2px solid #cdcdcd; border-radius: 14px; padding: 12px 16px;" required>
+                </div>
+                
+                <!-- Botões estilo pílula arredondada -->
+                <div class="modal-buttons" style="display: flex; gap: 12px; margin-top: 10px;">
+                    <button type="button" onclick="fecharModal()" class="btn-cancel" style="border: 2px solid #cdcdcd; background: transparent; color: #555555; border-radius: 24px; padding: 12px; font-weight: 700; transition: all 0.2s;">Cancelar</button>
+                    <button type="submit" class="btn-primary" style="background: var(--purple-grad); color: #ffffff; border-radius: 24px; padding: 12px; font-weight: 700; border: none; box-shadow: 0 4px 12px var(--purple-glow);">Salvar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- JANELA MODAL 2: ANALISAR PROPOSTA COMPLETA -->
+    <div id="modalProposta" class="modal-overlay">
+        <div class="modal-box" style="position: relative; max-width: 580px; padding: 30px; background: #ffffff !important; color: #111111 !important; border-radius: 28px;">
+            <!-- Botão fechar (X) estilo minimalista do Pinterest -->
+            <button type="button" onclick="fecharModal()" style="position: absolute; top: 20px; right: 24px; background: transparent; border: none; color: #767676; font-size: 1.8rem; cursor: pointer; line-height: 1;">&times;</button>
+            
+            <h2 style="margin-bottom: 20px; font-size: 1.4rem; text-transform: uppercase; font-weight: 800; color: #111111; text-align: center; letter-spacing: -0.5px;">Analisar Proposta</h2>
+            
+            <div class="form-group" style="margin-bottom: 12px;">
+                <label style="color: #333333; font-weight: 700; font-size: 0.72rem; text-transform: uppercase; margin-bottom: 4px; display: block; padding-left: 4px;">Responsável pela Proposta</label>
+                <input type="text" id="propResponsavel" readonly style="background: #f4f4f4; color: var(--accent-purple); font-weight: 800; border: 2px solid #e2e2e2; border-radius: 12px; padding: 10px 14px; font-size: 0.9rem;">
+            </div>
+            
+            <div class="form-group" style="margin-bottom: 12px;">
+                <label style="color: #333333; font-weight: 700; font-size: 0.72rem; text-transform: uppercase; margin-bottom: 4px; display: block; padding-left: 4px;">Nome do Grupo/Local</label>
+                <input type="text" id="propNome" readonly style="background: #f4f4f4; color: #111111; border: 2px solid #e2e2e2; border-radius: 12px; padding: 10px 14px; font-size: 0.9rem;">
+            </div>
+
+            <div style="display: flex; gap: 12px; margin-bottom: 12px;">
+                <div class="form-group" style="flex: 1;">
+                    <label style="color: #333333; font-weight: 700; font-size: 0.72rem; text-transform: uppercase; margin-bottom: 4px; display: block; padding-left: 4px;">Modalidade</label>
+                    <input type="text" id="propModalidade" readonly style="background: #f4f4f4; color: #111111; border: 2px solid #e2e2e2; border-radius: 12px; padding: 10px 14px; font-size: 0.9rem; width: 100%;">
+                </div>
+                <div class="form-group" style="flex: 1;">
+                    <label style="color: #333333; font-weight: 700; font-size: 0.72rem; text-transform: uppercase; margin-bottom: 4px; display: block; padding-left: 4px;">Horário de Funcionamento</label>
+                    <input type="text" id="propLocalizacao" readonly style="background: #f4f4f4; color: #111111; border: 2px solid #e2e2e2; border-radius: 12px; padding: 10px 14px; font-size: 0.9rem; width: 100%;">
+                </div>
+            </div>
+
+            <div style="display: flex; gap: 12px; margin-bottom: 12px;">
+                <div class="form-group" style="flex: 1;">
+                    <label style="color: #333333; font-weight: 700; font-size: 0.72rem; text-transform: uppercase; margin-bottom: 4px; display: block; padding-left: 4px;">CNPJ Proponente</label>
+                    <input type="text" id="propCnpj" readonly style="background: #f4f4f4; color: #111111; border: 2px solid #e2e2e2; border-radius: 12px; padding: 10px 14px; font-size: 0.9rem; width: 100%;">
+                </div>
+                <div class="form-group" style="flex: 1;">
+                    <label style="color: #333333; font-weight: 700; font-size: 0.72rem; text-transform: uppercase; margin-bottom: 4px; display: block; padding-left: 4px;">Faixa Etária Atendida</label>
+                    <input type="text" id="propFaixaEtaria" readonly style="background: #f4f4f4; color: #111111; border: 2px solid #e2e2e2; border-radius: 12px; padding: 10px 14px; font-size: 0.9rem; width: 100%;">
+                </div>
+            </div>
+
+            <div style="display: flex; gap: 12px; margin-bottom: 12px;">
+                <div class="form-group" style="flex: 1;">
+                    <label style="color: #333333; font-weight: 700; font-size: 0.72rem; text-transform: uppercase; margin-bottom: 4px; display: block; padding-left: 4px;">Telefone</label>
+                    <input type="text" id="propTelefone" readonly style="background: #f4f4f4; color: #111111; border: 2px solid #e2e2e2; border-radius: 12px; padding: 10px 14px; font-size: 0.9rem; width: 100%;">
+                </div>
+                <div class="form-group" style="flex: 1;">
+                    <label style="color: #333333; font-weight: 700; font-size: 0.72rem; text-transform: uppercase; margin-bottom: 4px; display: block; padding-left: 4px;">E-mail Oficial</label>
+                    <input type="text" id="propEmail" readonly style="background: #f4f4f4; color: #111111; border: 2px solid #e2e2e2; border-radius: 12px; padding: 10px 14px; font-size: 0.9rem; width: 100%;">
+                </div>
+            </div>
+
+            <div class="form-group" style="margin-bottom: 24px;">
+                <label style="color: #333333; font-weight: 700; font-size: 0.72rem; text-transform: uppercase; margin-bottom: 4px; display: block; padding-left: 4px;">Descrição Completa da Proposta</label>
+                <textarea id="propDescricao" readonly style="height: 75px; resize: none; width: 100%; background: #f4f4f4; color: #444444; border: 2px solid #e2e2e2; border-radius: 12px; padding: 12px; font-size: 0.9rem; font-family: inherit; line-height: 1.4;"></textarea>
+            </div>
+
+            <!-- Botões formato pílula com as ações reais do controller -->
+            <div class="modal-buttons" style="display: flex; gap: 12px; justify-content: flex-end;">
+                <button type="button" onclick="processarDecisaoModal('recusar')" class="btn-cancel" style="border: 2px solid #ef4444; background: transparent; color: #ef4444; border-radius: 24px; padding: 10px 24px; font-weight: 700; font-size: 0.85rem; cursor: pointer; transition: all 0.2s;">Recusar</button>
+                <button type="button" onclick="processarDecisaoModal('aprovar')" class="btn-primary" style="background: var(--purple-grad); color: #ffffff; border-radius: 24px; padding: 10px 28px; font-weight: 700; font-size: 0.85rem; border: none; cursor: pointer; box-shadow: 0 4px 12px var(--purple-glow); transition: all 0.2s;">Aceitar Grupo</button>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- =========================================================================
+       🚀 LOGICA JAVASCRIPT DE SESSÃO E ALTERNÂNCIA DE ABAS 🚀
+       ========================================================================= -->
+    <script>
+        // Alternância de Abas e sincronia visual com as pastas de métricas
+function alternarAbasAdmin(abaNome, botaoClicado) {
+    // Remove os estados ativos de todas as abas e pastas de métricas
+    document.querySelectorAll('.admin-tab').forEach(tab => tab.classList.remove('active-tab'));
+    document.querySelectorAll('.metric-folder').forEach(folder => folder.classList.remove('folder-active'));
+    
+    // Esconde todas as seções de conteúdo do mural administrativo
+    document.getElementById('secaoAtivos').classList.remove('active-content');
+    document.getElementById('secaoSolicitacoes').classList.remove('active-content');
+
+    // Ativa os elementos corretos baseados na seleção do administrador
+    if (abaNome === 'ativos') {
+        document.getElementById('tabAtivos').classList.add('active-tab');
+        document.getElementById('cardAtivos').classList.add('folder-active');
+        document.getElementById('secaoAtivos').classList.add('active-content');
+    } else {
+        document.getElementById('tabSolicitacoes').classList.add('active-tab');
+        document.getElementById('cardSolicitacoes').classList.add('folder-active');
+        document.getElementById('secaoSolicitacoes').classList.add('active-content');
+    }
+}
+
+// Blindagem de segurança: Só acessa se for administrador real no MySQL
+document.addEventListener("DOMContentLoaded", () => {
+    const usuarioLogado = JSON.parse(localStorage.getItem("usuarioComuna"));
+    
+    // Redireciona para o login caso o usuário tente burlar o endereço digitando admin.html no navegador
+    if (!usuarioLogado || usuarioLogado.tipo_acesso !== 'admin') {
+        alert("Acesso restrito apenas para administradores do sistema.");
+        window.location.href = 'login.html';
+    }
+});
+
+// Efetua a limpeza segura dos dados da gaveta para deslogar do sistema do TCC
+function efetuarSairAdmin() {
+    localStorage.removeItem("usuarioComuna");
+    window.location.href = 'login.html';
+}
+</script>

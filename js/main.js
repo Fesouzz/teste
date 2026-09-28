@@ -136,6 +136,7 @@ function filtrarEsporte(categoria, elemento) {
 async function testarLogin(event) {
     event.preventDefault(); 
 
+    // Captura o e-mail e senha digitados nos campos estilo Pinterest
     const email = document.getElementById('usuario').value; 
     const pass = document.getElementById('senha').value;
 
@@ -149,23 +150,27 @@ async function testarLogin(event) {
         const resultado = await resposta.json();
 
         if (resultado.sucesso) {
+            // 🔥 Salva a sessão na gaveta de forma limpa e imediata
+            localStorage.setItem("usuarioComuna", JSON.stringify(resultado.dados));
+
             if (resultado.dados.tipo_acesso === "admin") {
-                // Altera as caixas visualmente dentro do login.html
-                document.getElementById('loginBox').style.display = 'none';
-                document.getElementById('adminBox').style.display = 'block';
-                // Puxa e desenha os dados do banco nas tabelas imediatamente!
-                carregarProjetosDoBanco();
+                alert(`Painel Administrativo liberado! Bem-vindo(a), ${resultado.dados.nome}.`);
+                window.location.href = 'admin.html'; 
             } else {
-                alert(`Bem-vindo(a) de volta, ${resultado.dados.nome}! Redirecionando para a Home...`);
-                window.location.href = 'index.html'; 
+                alert(`Bem-vindo(a) de volta, ${resultado.dados.nome}! Redirecionando para seu Perfil...`);
+                
+                // 🔥 Força o redirecionamento limpando o cache da navegação atual
+                window.location.assign('perfil.html');
             }
         } else {
             alert(resultado.mensagem || "Erro na autenticação. Verifique os dados.");
         }
     } catch (error) {
-        alert("Erro crítico: Servidor da API fora do ar.");
+        console.error("Erro no login:", error);
+        alert("Erro crítico: Servidor da API fora do ar ou erro na requisição.");
     }
 }
+
 
 function logout() {
     document.getElementById('usuario').value = '';

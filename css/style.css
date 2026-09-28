@@ -577,6 +577,220 @@ body.fade-in {
   opacity: 1;
 }
 
+/* =========================================================================
+   👑 ESTILIZAÇÃO DO PAINEL ADMIN E MURAL EM GRADE (ESTILO PINTEREST) 👑
+   ========================================================================= */
+
+.admin-header-pinterest {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 40px 24px 20px 24px;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+
+.admin-title h1 {
+  font-size: 2.2rem;
+  font-weight: 800;
+  color: #ffffff;
+  letter-spacing: -0.5px;
+  margin-bottom: 4px;
+}
+
+.admin-title p {
+  font-size: 1rem;
+  color: var(--text-dim);
+}
+
+/* Botão Sair estilo pílula limpa */
+.btn-admin-logout {
+  background: rgba(239, 68, 68, 0.1);
+  color: #ef4444;
+  padding: 12px 24px;
+  border-radius: 24px;
+  font-weight: 700;
+  font-size: 0.9rem;
+  border: 1px solid rgba(239, 68, 68, 0.2);
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.btn-admin-logout:hover {
+  background: #ef4444;
+  color: #ffffff;
+}
+
+/* Pastas de Métricas do Pinterest */
+.admin-metrics-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 20px;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px 24px;
+}
+
+.metric-folder {
+  background: #1c1c1c;
+  border: 1px solid #2c2c2c;
+  border-radius: 24px;
+  padding: 24px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.metric-folder:hover, .metric-folder.folder-active {
+  border-color: var(--accent-purple);
+  background: linear-gradient(135deg, #1c1c1c 0%, rgba(138, 78, 255, 0.05) 100%);
+  transform: translateY(-2px);
+}
+
+.metric-folder h3 {
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  color: var(--text-dim);
+  letter-spacing: 0.5px;
+  margin-bottom: 8px;
+  font-weight: 700;
+}
+
+.metric-folder p {
+  font-size: 2.2rem;
+  font-weight: 800;
+  color: #ffffff;
+}
+
+.metric-folder .folder-icon {
+  position: absolute;
+  right: 24px;
+  bottom: 20px;
+  font-size: 2.5rem;
+  color: rgba(138, 78, 255, 0.15);
+  transition: color 0.2s;
+}
+.metric-folder:hover .folder-icon, .metric-folder.folder-active .folder-icon {
+  color: rgba(138, 78, 255, 0.4);
+}
+
+/* Abas centrais de navegação */
+.admin-tabs {
+  display: flex;
+  justify-content: center;
+  gap: 24px;
+  margin: 20px 0 40px 0;
+  border-bottom: 1px solid #2c2c2c;
+  padding-bottom: 12px;
+}
+
+.admin-tab {
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--text-dim);
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 8px 4px;
+  position: relative;
+  transition: color 0.2s;
+}
+
+.admin-tab.active-tab {
+  color: #ffffff;
+}
+
+.admin-tab.active-tab::after {
+  content: '';
+  position: absolute;
+  bottom: -13px;
+  left: 0;
+  width: 100%;
+  height: 3px;
+  background-color: #ffffff;
+  border-radius: 2px;
+}
+
+/* Mural Pinterest para os Cards de Gerenciamento */
+.admin-mural-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 20px;
+  max-width: 1200px;
+  width: 100%;
+  margin: 0 auto;
+  padding: 0 24px 60px 24px;
+}
+
+/* Card customizado para ações administrativas */
+.admin-control-card {
+  background: var(--bg-card);
+  border: 1px solid #2c2c2c;
+  border-radius: 20px;
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 16px;
+  transition: all 0.2s ease;
+}
+
+.admin-control-card:hover {
+  border-color: var(--pill-border);
+  transform: translateY(-2px);
+}
+
+.card-header-info {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.card-actions-row {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  border-top: 1px solid #2c2c2c;
+  padding-top: 14px;
+}
+
+.btn-action-pill {
+  padding: 8px 16px;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.btn-action-edit { background: rgba(77, 163, 255, 0.1); color: #4da3ff; }
+.btn-action-edit:hover { background: #4da3ff; color: #141414; }
+
+.btn-action-delete { background: rgba(239, 68, 68, 0.1); color: #ef4444; }
+.btn-action-delete:hover { background: #ef4444; color: #ffffff; }
+
+.btn-action-analyze { 
+  background: rgba(138, 78, 255, 0.15); 
+  color: var(--accent-purple); 
+  width: 100%; 
+  border-radius: 20px;
+  padding: 10px;
+  font-size: 0.8rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.btn-action-analyze:hover { background: var(--purple-grad); color: #ffffff; }
+
+.tab-content { display: none; }
+.tab-content.active-content { display: block; }
+
 
 @media (max-width: 900px) {
   .features-grid { gap: 12px; }

@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Meu Perfil - Comuna Esportes</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cloudflare.com">
+    <script src="js/components.js" defer></script>
+    <style>
+        /* --- ESTILIZAÇÃO DO PERFIL ESTILO PINTEREST --- */
+        .profile-header {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            padding: 40px 20px 20px 20px;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* Avatar circular grande do Pinterest */
+        .profile-avatar {
+            width: 120px;
+            height: 120px;
+            background: var(--purple-grad);
+            color: #ffffff;
+            font-size: 3rem;
+            font-weight: 700;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 16px;
+            box-shadow: 0 8px 24px rgba(138, 78, 255, 0.3);
+            text-transform: uppercase;
+        }
+
+        .profile-name {
+            font-size: 2.2rem;
+            font-weight: 800;
+            color: #ffffff;
+            margin-bottom: 4px;
+            letter-spacing: -0.5px;
+        }
+
+        .profile-username {
+            font-size: 1rem;
+            color: var(--text-dim);
+            margin-bottom: 12px;
+        }
+
+        .profile-bio {
+            font-size: 0.95rem;
+            color: #f4f4f4;
+            max-width: 450px;
+            line-height: 1.5;
+            margin-bottom: 20px;
+        }
+
+        /* Botões em formato de pílula arredondada */
+        .profile-actions {
+            display: flex;
+            gap: 12px;
+        }
+
+        .btn-profile {
+            background-color: #2c2c2c;
+            color: #ffffff;
+            padding: 12px 24px;
+            border-radius: 24px;
+            font-weight: 700;
+            font-size: 0.9rem;
+            border: none;
+            cursor: pointer;
+            transition: background 0.2s, transform 0.1s;
+        }
+
+        .btn-profile:hover {
+            background-color: #3d3d3d;
+            transform: scale(1.02);
+        }
+
+        .btn-profile-logout {
+            background: rgba(239, 68, 68, 0.1);
+            color: #ef4444;
+            border: 1px solid rgba(239, 68, 68, 0.2);
+        }
+        .btn-profile-logout:hover {
+            background: #ef4444;
+            color: #ffffff;
+        }
+
+        /* Abas centrais de navegação de pastas do Pinterest */
+        .profile-tabs {
+            display: flex;
+            justify-content: center;
+            gap: 24px;
+            margin: 30px 0 40px 0;
+            border-bottom: 1px solid #2c2c2c;
+            padding-bottom: 12px;
+        }
+
+        .profile-tab {
+            font-size: 1rem;
+            font-weight: 700;
+            color: var(--text-dim);
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 8px 4px;
+            position: relative;
+            transition: color 0.2s;
+        }
+
+        .profile-tab.active-tab {
+            color: #ffffff;
+        }
+
+        /* Linha indicadora abaixo da aba ativa */
+        .profile-tab.active-tab::after {
+            content: '';
+            position: absolute;
+            bottom: -13px;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background-color: #ffffff;
+            border-radius: 2px;
+        }
+
+        /* Grid de Painéis Organizadores (Estilo os quadros/pastas do Pinterest) */
+        .pinterest-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 20px;
+            max-width: 1200px;
+            width: 100%;
+            margin: 0 auto;
+            padding: 0 24px 60px 24px;
+        }
+
+        /* Esconde seções alternáveis */
+        .tab-content {
+            display: none;
+        }
+        .tab-content.active-content {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- MENU SUPERIOR GLOBAL -->
+    <comuna-navbar></comuna-navbar>
+
+    <!-- CABEÇALHO DO PERFIL CENTRALIZADO -->
+    <section class="profile-header">
+        <!-- Puxa a inicial do usuário de forma dinâmica via JS se quiser, deixamos 'M' de exemplo -->
+        <div class="profile-avatar" id="lblIniciais">M</div>
+        <h1 class="profile-name" id="lblNomeCompleto">Mariana Souza</h1>
+        <p class="profile-username" id="lblEmail">@mariana_souza</p>
+        <p class="profile-bio">⚽ Atleta amadora de Vôlei de areia e defensora do esporte de várzea na Zona Leste. Colando junto em todos os rachas comunitários.</p>
+        
+        <div class="profile-actions">
+            <button class="btn-profile" onclick="alert('Funcionalidade de edição do TCC')">Editar Perfil</button>
+            <button class="btn-profile btn-profile-logout" onclick="efetuarSairPerfil()">Sair da Conta</button>
+        </div>
+    </section>
+
+    <!-- ABAS ESTILO PASTAS DO PINTEREST -->
+    <div class="profile-tabs">
+        <button class="profile-tab active-tab" onclick="alternarAbasPerfil('salvos', this)">Salvos</button>
+        <button class="profile-tab" onclick="alternarAbasPerfil('criados', this)">Meus Projetos</button>
+    </div>
+
+    <!-- SEÇÃO 1: SALVOS / FAVORITOS (Onde ele deu "Colar Junto") -->
+    <div id="conteudoSalvos" class="tab-content active-content">
+        <div class="pinterest-grid">
+            <!-- Reaproveitando seus web components oficiais criados no seu components.js -->
+            <comuna-group-card sport="volei" emoji="🏐" name="Vôlei dos Coroas" meta="Domingos às 08h • Quadra de Areia" url="volei.html"></comuna-group-card>
+            <comuna-group-card sport="basquete" emoji="🏀" name="Crias do Asfalto 3x3" meta="Segundas às 19h • Parque" url="basquete.html"></comuna-group-card>
+            <comuna-group-card sport="futebol" emoji="⚽" name="União do Terrão F.C." meta="Sábados às 14h • Campo Central" url="futebol.html"></comuna-group-card>
+        </div>
+    </div>
+
+    <!-- SEÇÃO 2: CRIADOS / PROPOSTAS (Projetos que este usuário enviou pelo formulário) -->
+    <div id="conteudoCriados" class="tab-content">
+        <div class="pinterest-grid">
+            <!-- Exemplo de propostas enviadas pelo usuário que vieram do banco de dados -->
+            <comuna-group-card sport="artes-marciais" emoji="🥋" name="Crias do Tatame" meta="Status: Aprovado • Galpão Cultural" url="artes-marciais.html"></comuna-group-card>
+            <comuna-group-card sport="futebol" emoji="🏆" name="Racha dos Cria" meta="Status: Pendente de Análise" url="#"></comuna-group-card>
+        </div>
+    </div>
+
+    <!-- RODAPÉ GLOBAL -->
+    <comuna-footer></comuna-footer>
+
+    <script>
+        // Lógica de alternância de abas sem dar refresh na página
+function alternarAbasPerfil(abaNome, botaoClicado) {
+    document.querySelectorAll('.profile-tab').forEach(tab => tab.classList.remove('active-tab'));
+    botaoClicado.classList.add('active-tab');
+
+    document.getElementById('conteudoSalvos').classList.remove('active-content');
+    document.getElementById('conteudoCriados').classList.remove('active-content');
+
+    if (abaNome === 'salvos') {
+        document.getElementById('conteudoSalvos').classList.add('active-content');
+    } else {
+        document.getElementById('conteudoCriados').classList.add('active-content');
+    }
+}
+
+// 🔐 TRAVA DE SEGURANÇA REAL ATIVADA: Puxa os dados reais do seu MySQL
+document.addEventListener("DOMContentLoaded", () => {
+    const usuarioLogado = JSON.parse(localStorage.getItem("usuarioComuna"));
+
+    if (usuarioLogado) {
+        // Se achou o login no banco, injeta os dados reais na tela na hora!
+        document.getElementById('lblNomeCompleto').textContent = usuarioLogado.nome;
+        document.getElementById('lblEmail').textContent = `@${usuarioLogado.email.split('@')[0]}`;
+        document.getElementById('lblIniciais').textContent = usuarioLogado.nome.charAt(0);
+    } else {
+        // Se tentar entrar no perfil direto sem logar, ele barra e manda pro login
+        alert("Acesso negado. Por favor, faça login com sua conta primeiro.");
+        window.location.href = 'login.html';
+    }
+});
+
+// Função oficial para deslogar e limpar o navegador
+function efetuarSairPerfil() {
+    localStorage.removeItem("usuarioComuna");
+    window.location.href = 'index.html';
+}
+
+    </script>
+    <script src="js/main.js"></script>
+</body>
+</html>
