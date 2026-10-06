@@ -91,6 +91,13 @@ nav.main-nav a:hover, nav.main-nav a.active {
   position: relative;
   display: flex;
   align-items: center;
+  border: solid 1px transparent;
+ 
+
+}
+.search-box :focus{
+  border-radius: 20px;
+  background-color: #414141;
 }
 
 .search-input {
